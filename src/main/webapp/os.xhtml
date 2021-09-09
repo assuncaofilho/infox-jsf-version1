@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui = "http://java.sun.com/jsf/facelets">
+
+
+
+<h:head>
+	<title>Cadastro de OS</title>
+	
+<style type="text/css">
+
+
+</style>
+
+    
+</h:head>
+
+<h:body>
+
+		<ui:include src="/menu.xhtml"/>		
+		
+		
+		<h:form id="formOS">
+		
+		
+		<h:messages infoStyle="color:green;font-style:italic; font-weight:bold;font-size:15pt;float:center;"/>
+
+	
+			
+		
+		<h:panelGrid columns="2" id="gridOS">
+			<f:facet name="header">
+				Cadastro de Ordem de Serviço
+			</f:facet>
+		
+		<h:outputLabel value="Id:"/>
+		<h:inputText value="#{osBean.os.id}" readonly="true"/>
+		
+		
+		<h:outputLabel value="Data:"/>
+		<h:inputText value="#{osBean.os.data}" readonly="true">
+			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="GMT-03:00"/>
+		</h:inputText>
+		
+		<h:outputLabel value="Tipo"/>
+		<h:selectOneRadio value="#{osBean.os.tipo}">
+			<f:selectItem itemValue="OS" itemLabel="Ord. de Serviço"/>
+			<f:selectItem itemValue="ORC" itemLabel="Orçamento"/>
+		</h:selectOneRadio>
+		
+		<h:outputLabel value="Situação"/>
+		<h:selectOneMenu value="#{osBean.os.situacao}">
+			<f:selectItem itemValue="Na Bancada" itemLabel="Na Bancada"/>
+			<f:selectItem itemValue="Aguardando Peças" itemLabel="Aguardando Peças"/>
+			<f:selectItem itemValue="Aguardando Aprovação" itemLabel="Aguardando Aprovação"/>
+			<f:selectItem itemValue="Conserto não autorizado" itemLabel="Conserto não autorizado"/>
+		</h:selectOneMenu>
+		
+		<h:outputLabel value="Equipamento:"/>
+		<h:inputText value="#{osBean.os.equipamento}" required="true" requiredMessage="Informe o equipamento!"/>
+		
+		<h:outputLabel value="Defeito:"/>
+		<h:inputText value="#{osBean.os.defeito}"/>
+		
+		<h:outputLabel value="Serviço:"/>
+		<h:inputText value="#{osBean.os.servico}"/>
+		
+		<h:outputLabel value="Valor:"/>
+		<h:inputText value="#{osBean.os.valor}">
+			<f:convertNumber pattern="#0.00" />
+		</h:inputText>
+		
+		<h:outputLabel value="IdTec:"/>
+		<h:inputText value="#{osBean.os.usuario.id}" readonly="true" required="true" requiredMessage="Busque um técnico!" id="idtec"/>
+		
+		<h:outputLabel value="Tec.:"/>
+		<h:inputText value="#{osBean.os.usuario.nome}" readonly="true" id="nometec"/>
+		
+		<h:outputLabel value="IdCli:"/>
+		<h:inputText value="#{osBean.os.cliente.id}" readonly="true" required="true" requiredMessage="Busque um cliente!" id="idcli"/>
+		
+		<h:outputLabel value="Cliente.:"/>
+		<h:inputText value="#{osBean.os.cliente.nome}" readonly="true" id="nomecli"/>
+		
+
+			
+		<h:outputLabel value=""/>
+		<h:panelGroup>
+			<h:commandButton value="Novo" id="botaoNovo" action="#{osBean.novo}" image="/resources/img/novo.png" title="Novo" immediate="true">
+				<f:ajax execute="botaoNovo" render="@form"/>
+			</h:commandButton>
+			<h:commandButton style="margin-left:1cm;" value="Salvar" action="#{osBean.salvar}" image="/resources/img/salvar.png" title="Salvar"/>
+			<h:commandButton style="margin-left:1cm;" value="Excluir" action="#{osBean.remove}" image="/resources/img/delete.png" title="Excluir"/>
+			<h:commandButton style="margin-left:1cm;" value="Limpar" id="botaoLimpar" action="#{osBean.limpar}" image="/resources/img/limpar.png" title="Limpar" immediate="true">
+				<f:ajax execute="botaoLimpar" render="@form"/>
+			</h:commandButton>
+		</h:panelGroup>
+
+			
+		</h:panelGrid>
+		
+		</h:form>
+		
+		<h:form id="formTableCli">
+		
+		<br/>
+		<h:outputLabel value="Nome do Cliente:" for="nomeBusca"/>
+		<h:inputText id="nomeBusca" value="#{osBean.nomeBuscaCliente}"/>
+		<h:commandButton value="Buscar" title="Buscar" action="#{osBean.buscarClientesByName}" id="botaoBuscarCli" immediate="true">
+			<f:ajax execute="botaoBuscarCli" render="dataTableCli"/>
+		</h:commandButton>
+		
+		
+		<h:dataTable id="dataTableCli" value="#{osBean.clientesResult}" var="c" border="3" cellpadding="6" style="margin-top:.5cm">
+		
+			<f:facet name="header">
+				Resultados para a busca de clientes
+			</f:facet>
+			
+			<h:column>
+				<f:facet name=""></f:facet>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">ID</f:facet>
+				<h:outputText value="#{c.id}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{c.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Telefone</f:facet>
+				<h:outputText value="#{c.telefone}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				<h:outputText value="#{c.email}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Ação</f:facet>
+				<h:commandLink value="Selecionar" immediate="true" id="selecionarCli" type="button"> 
+					<f:setPropertyActionListener value="#{c}" target="#{osBean.os.cliente}"/>
+					<f:ajax execute="@this" render="@form :formOS:idcli :formOS:nomecli"/>
+				</h:commandLink>
+			</h:column>
+			
+		
+		</h:dataTable>
+		
+		</h:form>
+		
+		<br/>
+		
+		<h:form id="formTableTec" style="margin-top:-200px">
+		
+		<h:outputLabel value="Nome do Téc.:" for="nomeBuscaTec" style="margin-left:15cm;"/>
+		<h:inputText id="nomeBuscaTec" value="#{osBean.nomeBuscaTecnico}"/>
+		<h:commandButton value="Buscar" action="#{osBean.buscarTecnicosByName}" id="botaoBuscarTec">
+			<f:ajax execute="botaoBuscarTec" render="dataTableTec"/>
+		</h:commandButton>
+		
+		
+		<h:dataTable id="dataTableTec" value="#{osBean.usuariosResult}" var="u" border="3" cellpadding="6" style="margin-top:.5cm;
+		margin-left:15cm">
+		
+			<f:facet name="header">
+				Resultados para a busca de técnicos
+			</f:facet>
+			
+			<h:column>
+				<f:facet name=""></f:facet>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">ID</f:facet>
+				<h:outputText value="#{u.id}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{u.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Ação</f:facet>
+				<h:commandLink value="Selecionar" immediate="true" id="selecionarTec" type="button"> 
+					<f:setPropertyActionListener value="#{u}" target="#{osBean.os.usuario}" />
+					<f:ajax execute="@this" render="@form :formOS:idtec :formOS:nometec"/>
+				</h:commandLink>
+			</h:column>
+			
+		</h:dataTable>
+		
+		</h:form>
+				
+		
+		
+</h:body>
+
+
+</html>

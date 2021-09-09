@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui = "http://java.sun.com/jsf/facelets">
+
+
+
+<h:head>
+	<title>Cadastro de Clientes</title>
+	
+<style type="text/css">
+
+
+</style>
+
+    
+</h:head>
+
+<h:body>
+
+		<ui:include src="/menu.xhtml"/>		
+		
+		
+		<h:form id="formCliente">
+		
+		
+		<h:messages infoStyle="color:green;font-style:italic; font-weight:bold;font-size:15pt;float:center;"/>
+
+	
+			
+		
+		<h:panelGrid columns="2" id="gridCliente" style="margin-top:1cm">
+			<f:facet name="header">
+				<h:outputText value="Cadastro de Clientes" style="margin-left:-1cm"/> 
+			</f:facet>
+		
+		<h:outputLabel value="Id:"/>
+		<h:inputText value="#{clienteBean.cliente.id}" readonly="true"/>
+		
+		
+		<h:outputLabel value="Nome:"/>
+		<h:inputText value="#{clienteBean.cliente.nome}" required="true" requiredMessage="Informe o nome do usuário!"
+		validatorMessage="Nome tem que ter no mínimo 2 letras">
+			<f:validateLength minimum="2" maximum="20"/>
+		</h:inputText>
+		
+		<h:outputLabel value="Endereço:"/>
+		<h:inputText value="#{clienteBean.cliente.endereco}"/>
+		
+		<h:outputLabel value="Telefone:"/>
+		<h:inputText value="#{clienteBean.cliente.telefone}" required="true" requiredMessage="Informe um telefone para o cliente"/>
+		
+		<h:outputLabel value="Email:"/>
+		<h:inputText value="#{clienteBean.cliente.email}" required="true" requiredMessage="Informe um email para o cliente"/>
+			
+	
+	
+		
+			
+		<h:outputLabel value=""/>
+		<h:panelGroup>
+			<h:commandButton style="margin-left:1cm;margin-top:1cm; margin-bottom:1cm" value="Novo" id="botaoNovo" action="#{clienteBean.novo}" image="/resources/img/novo.png" title="Novo" immediate="true">
+				<f:ajax execute="botaoNovo" render="@form"/>
+			</h:commandButton>
+			<h:commandButton style="margin-left:1cm;margin-top:1cm; margin-bottom:1cm" value="Salvar" action="#{clienteBean.salvar}" image="/resources/img/salvar.png" title="Salvar"/>
+			<h:commandButton style="margin-left:1cm;margin-top:1cm; margin-bottom:1cm" value="Excluir" action="#{clienteBean.remove}" image="/resources/img/delete.png" title="Excluir"/>
+			<h:commandButton style="margin-left:1cm;margin-top:1cm; margin-bottom:1cm" value="Limpar" id="botaoLimpar" action="#{clienteBean.limpar}" image="/resources/img/limpar.png" title="Limpar" immediate="true">
+				<f:ajax execute="botaoLimpar" render="@form"/>
+			</h:commandButton>
+		</h:panelGroup>
+
+			
+		</h:panelGrid>
+		
+		</h:form>
+		
+		<h:form id="formTable">
+		
+		<h:outputLabel value="Nome do Cliente:" for="nomeBusca"/>
+		<h:inputText id="nomeBusca" value="#{clienteBean.nomeBusca}"/>
+		<h:commandButton value="Buscar" action="#{clienteBean.buscarClientesByName}"/>
+		
+		
+		<h:dataTable id="dataTable" value="#{clienteBean.clientesBusca}" var="c" border="3" cellpadding="6" style="margin-top:1cm">
+		
+			<f:facet name="header">
+				Resultados para a busca de clientes
+			</f:facet>
+			
+			<h:column>
+				<f:facet name=""></f:facet>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">ID</f:facet>
+				<h:outputText value="#{c.id}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{c.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Telefone</f:facet>
+				<h:outputText value="#{c.telefone}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				<h:outputText value="#{c.email}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Editar</f:facet>
+				<h:commandLink> 
+					<f:setPropertyActionListener value="#{c}" target="#{clienteBean.cliente}" />
+					<h:graphicImage value="/resources/img/editar.png" style="margin-left:0.2cm;"/>
+				</h:commandLink>
+			</h:column>
+
+			<h:column>	
+				<f:facet name="header">Excluir</f:facet>
+				<h:commandLink action="#{clienteBean.remove}" id="linkRemove"> 
+					<f:setPropertyActionListener value="#{c}" target="#{clienteBean.cliente}" />
+					<h:graphicImage value="/resources/img/delete.png" style="margin-left:0.2cm;"/>
+					<f:ajax execute="linkRemove" render="@form :formCliente"/>
+				</h:commandLink>
+			</h:column>
+			
+		
+		</h:dataTable>
+		
+		</h:form>
+		
+		
+		
+</h:body>
+
+
+</html>
